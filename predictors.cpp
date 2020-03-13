@@ -25,23 +25,23 @@ int main(int argc, char *argv[]) {
   vector<Branch> branches;
 
   // Open file for reading
-  ifstream infile("test_input.txt");
+  ifstream infile(argv[1]);
 
   // The following loop will read a hexadecimal number and
   // a string each time and then output them
   while(infile >> std::hex >> addr >> behavior >> std::hex >> target) {
-    cout << addr;
+    //cout << addr;
     Branch temp = Branch();
     temp.setTarget(target);
     if(behavior == "T") {
-      cout << " -> taken, ";
+      //cout << " -> taken, ";
       //char* var = (char*) behavior;
       temp.setBehavior(behavior);
     }else {
-      cout << " -> not taken, ";
+      //cout << " -> not taken, ";
     }
     	temp.setAddress(addr);
-	cout << "target=" << target << endl;
+	//cout << "target=" << target << endl;
         branches.push_back(temp);
 	
 
@@ -55,13 +55,13 @@ int main(int argc, char *argv[]) {
   //function calls:
   always_taken(branches);
   always_nonTaken(branches);
-  single_bimodal(branches);
+  single_bimodal(branches,16);
   
 
   return 0;
 }
 void always_taken(vector<Branch> v){
-	int accurate;
+	int accurate = 0;
        for (int i = 0; i< v.size(); i++){
 	       if (v[i].getBehavior() == "T"){
 		       accurate++;
@@ -71,7 +71,7 @@ void always_taken(vector<Branch> v){
        cout<<"Always Taken: "<<accurate<<","<<v.size()<<endl;
 }
 void always_nonTaken(vector<Branch> v){
-	int accurate;
+	int accurate = 0;
 	for (int i = 0; i<v.size(); i++){
 		if (v[i].getBehavior() == "NT"){
 			accurate++;
@@ -82,82 +82,30 @@ void always_nonTaken(vector<Branch> v){
 }
 void single_bimodal(vector<Branch> v, int size){
 	//string previous = "T";
-	int accurate;
-	/*for (int i = 0; i<v.size(); i++){
-		if(v[i].getBehavior() == previous){
-			accurate++;
-		}
-		previous = v[i].getBehavior();
-	}*/
+	int accurate = 0;
 	//creating table
-	vector<string>table;
+
+	string table[size];
 	for (int i = 0; i<size;i++){
-		table.push_back("T"); // initialize all values in table to "T" - taken
+		table[i] = "T"; // initialize all values in table to "T" - taken
 	}
-	unsigned long long index = 0;
+
+	int index = 0;
 	switch(size){
 		case 16:
-			for (int i = 0; i<size;i++){
+
+			for (int i = 0; i<v.size();i++){
 				index = v[i].getAddress() & 0x0000000F; //15 in hex
 				if (v[i].getBehavior() == table[index]){
 					accurate++;
 				}
+				
 				table[index] = v[i].getBehavior();
+				
 			}
-		case 32:
-			for (int i = 0; i<size;i++){
-				index = v[i].getAddress() & 0x0000001F; //31 in hex
-				if (v[i].getBehavior() == table[index]){
-					accurate++;
-				}
-				table[index] = v[i].getBehavior();
-			}
-		
-		case 128:
-			for (int i = 0; i<size;i++){
-				index = v[i].getAddress() & 0x0000007F; //127 in hex
-				if (v[i].getBehavior() == table[index]){
-					accurate++;
-				}
-				table[index] = v[i].getBehavior();
-			}
-
-		case 256:
-			for (int i = 0; i<size;i++){
-				index = v[i].getAddress() & 0x000000FF; //255 in hex
-				if (v[i].getBehavior() == table[index]){
-					accurate++;
-				}
-				table[index] = v[i].getBehavior();
-			}
-		
-		case 512:
-			for (int i = 0; i<size;i++){
-				index = v[i].getAddress() & 0x000001FF; //511 in hex
-				if (v[i].getBehavior() == table[index]){
-					accurate++;
-				}
-				table[index] = v[i].getBehavior();
-			}
-		
-		case 1024:
-			for (int i = 0; i<size;i++){
-				index = v[i].getAddress() & 0x000003FF; //1023 in hex
-				if (v[i].getBehavior() == table[index]){
-					accurate++;
-				}
-				table[index] = v[i].getBehavior();
-			}
-	
-		case 2048:
-			for (int i = 0; i<size;i++){
-				index = v[i].getAddress() & 0x000007FF; //2047 in hex
-				if (v[i].getBehavior() == table[index]){
-					accurate++;
-				}
-				table[index] = v[i].getBehavior();
-			}
+		break;
 	}
+	cout<<"Single bimodal: "<<accurate<<","<<v.size()<<endl;
 }
 
 

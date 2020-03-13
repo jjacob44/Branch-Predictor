@@ -16,4 +16,4 @@ clean:
 	rm -rf *.o
 
 run: all
-	./predictors test_input.txt 
+	./predictors short_trace1.txt 
