@@ -155,7 +155,7 @@ void single_bimodal(vector<Branch> v, int size){
 		break;
 		case 2048:
 			for(int i=0;i<v.size();i++){
-				index=v[i].getAddress()&&0x000007FF;
+				index=v[i].getAddress()&0x000007FF;
 				if(v[i].getBehavior()==table[index]){
 					accurate++;
 				}
