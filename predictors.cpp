@@ -56,7 +56,12 @@ int main(int argc, char *argv[]) {
   always_taken(branches);
   always_nonTaken(branches);
   single_bimodal(branches,16);
-  
+  single_bimodal(branches,32);
+  single_bimodal(branches,128);
+  single_bimodal(branches,256);
+  single_bimodal(branches,512);
+  single_bimodal(branches,1024);
+  single_bimodal(branches,2048);
 
   return 0;
 }
@@ -90,10 +95,9 @@ void single_bimodal(vector<Branch> v, int size){
 		table[i] = "T"; // initialize all values in table to "T" - taken
 	}
 
-	int index = 0;
+	unsigned long long index = 0;
 	switch(size){
 		case 16:
-
 			for (int i = 0; i<v.size();i++){
 				index = v[i].getAddress() & 0x0000000F; //15 in hex
 				if (v[i].getBehavior() == table[index]){
@@ -104,8 +108,63 @@ void single_bimodal(vector<Branch> v, int size){
 				
 			}
 		break;
+		case 32:
+			for (int i=0;i<v.size();i++){
+				index = v[i].getAddress() & 0x0000001F; //31 in hex
+				if(v[i].getBehavior()==table[index]){
+					accurate++;
+				}
+				table[index] = v[i].getBehavior();
+			}
+		break;
+		case 128:
+			for(int i=0;i<v.size();i++){
+				index = v[i].getAddress()&0x0000007F; //127 in hex
+				if(v[i].getBehavior()==table[index]){
+					accurate++;
+				}
+				table[index]=v[i].getBehavior();
+			}
+		break;
+		case 256:
+			for (int i=0;i<v.size();i++){
+				index = v[i].getAddress()&0x000000FF; //255
+				if(v[i].getBehavior()==table[index]){
+					accurate++;
+				}
+				table[index]=v[i].getBehavior();
+			}
+		break;
+		case 512:
+			for(int i=0;i<v.size();i++){
+				index=v[i].getAddress()&0x000001FF;//511
+				if(v[i].getBehavior()==table[index]){
+					accurate++;
+				}
+				table[index]=v[i].getBehavior();
+			}
+		break;
+		case 1024:
+			for(int i=0;i<v.size();i++){
+				index=v[i].getAddress()&0x000003FF;
+				if(v[i].getBehavior()==table[index]){
+					accurate++;
+				}
+				table[index]=v[i].getBehavior();
+			}
+		break;
+		case 2048:
+			for(int i=0;i<v.size();i++){
+				index=v[i].getAddress()&&0x000007FF;
+				if(v[i].getBehavior()==table[index]){
+					accurate++;
+				}
+				table[index]=v[i].getBehavior();
+			}
+		break;
+
 	}
-	cout<<"Single bimodal: "<<accurate<<","<<v.size()<<endl;
+	cout<<"Single bimodal"<<"("<<size<<"): "<<accurate<<","<<v.size()<<endl;
 }
 
 
