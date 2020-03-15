@@ -166,6 +166,65 @@ void single_bimodal(vector<Branch> v, int size){
 	}
 	cout<<"Single bimodal"<<"("<<size<<"): "<<accurate<<","<<v.size()<<endl;
 }
+void double_bimodal(vector<Branch>v, int size){
+	int prediction = 11;
+	int accurate = 0;
+	for (int i = 0; i<v.size; i++){
+		if (v[i].getBehavior == "T"){
+			if (prediction == 11 || prediction == 10){
+				accurates++;
+			}
+		}
+		prediction = move_state(v[i],prediction);
+	}
+	cout<<"Double bimodal
+
+
+
+}
+
+
+
+
+int move_state ==  (Branch b,int state){
+	switch(state){
+		case 11: //strongly taken
+			if(b.getBehavior() == "T"){
+				return 11;//stay at strongly taken
+			}
+			else {
+				return 10;//move to weakly taken
+			}
+		break;
+		case 10: //weakly taken
+			if(b.getBehavior() == "T"){ 
+				return 11;//move to strongly taken
+			}
+			else{
+				return 1;//move to weakly non-taken
+			}
+		break;
+		case 1: //weakly non-taken
+			if(b.getBehavior() == "T"){
+				return 10;//move to weakly taken
+			}
+			else{
+				return 0;//move to strongly non-taken
+			}
+		break;
+		case 0: //strongly non-taken
+			if(b.getBehavior() == "T"){
+				return 1;//move to weakly non-taken
+			}
+			else{
+				return 0;//stay at strongly non-taken
+			}
+		break;
+	}
+}
+
+			
+
 
 
 
