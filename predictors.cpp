@@ -56,6 +56,7 @@ int main(int argc, char *argv[]) {
   //function calls:
   always_taken(branches);
   always_nonTaken(branches);
+  //single bimodal
   single_bimodal(branches,16);
   single_bimodal(branches,32);
   single_bimodal(branches,128);
@@ -63,7 +64,14 @@ int main(int argc, char *argv[]) {
   single_bimodal(branches,512);
   single_bimodal(branches,1024);
   single_bimodal(branches,2048);
+  //double bimodal
   double_bimodal(branches,16);
+  double_bimodal(branches,32);
+  double_bimodal(branches,128);
+  double_bimodal(branches,256);
+  double_bimodal(branches,512);
+  double_bimodal(branches,1024);
+  double_bimodal(branches,2048);
 	
   return 0;
 }
