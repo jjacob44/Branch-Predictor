@@ -185,7 +185,12 @@ void double_bimodal(vector<Branch>v, int size){
 						accurate++;
 					}
 				}
-				predictions[index] = move_state(v[i],predictions[i]);
+				else if(v[i].getBehavior() == "NT"){
+					if(predictions[index] == 0 || predictions[index] == 1){
+						accurate++;
+					}
+				}
+				predictions[index] = move_state(v[i],predictions[index]);
 			}
 		break;
 
@@ -206,7 +211,7 @@ int move_state(Branch b,int state){
 			if(b.getBehavior() == "T"){
 				return 11;//stay at strongly taken
 			}
-			else {
+			else{
 				return 10;//move to weakly taken
 			}
 		break;
