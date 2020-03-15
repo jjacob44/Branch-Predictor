@@ -14,7 +14,8 @@ using namespace std;
 void always_taken(vector<Branch>);
 void always_nonTaken(vector<Branch>);
 void single_bimodal(vector<Branch>,int);
-
+void double_bimodal(vector<Branch>,int);
+int move_state(Branch, int);
 int main(int argc, char *argv[]) {
 
   // Temporary variables
@@ -62,7 +63,8 @@ int main(int argc, char *argv[]) {
   single_bimodal(branches,512);
   single_bimodal(branches,1024);
   single_bimodal(branches,2048);
-
+  double_bimodal(branches,16);
+	
   return 0;
 }
 void always_taken(vector<Branch> v){
@@ -167,24 +169,30 @@ void single_bimodal(vector<Branch> v, int size){
 	cout<<"Single bimodal"<<"("<<size<<"): "<<accurate<<","<<v.size()<<endl;
 }
 void double_bimodal(vector<Branch>v, int size){
-	int table[size];
+	int predictions[size];
 	//initialize all values in table to strongly taken:
 	for(int i = 0;i<size;i++){
-		table[i] = 11;
+		predictions[i] = 11;
 	}
 	int accurate = 0;
-/*	for (int i = 0; i<v.size; i++){
-		if (v[i].getBehavior == "T"){
-			if (prediction == 11 || prediction == 10){
-				accurates++;
-			}
-		}
-		prediction = move_state(v[i],prediction);
-	}
-	cout<<"Double bimodal*/
+	unsigned long long index = 0;
 	switch(size){
+		case 16:
+			for(int i = 0; i<v.size();i++){
+				index = v[i].getAddress()&0x0000000F;
+				if (v[i].getBehavior() == "T"){
+					if(predictions[index] == 11 || predictions[index]==10){
+						accurate++;
+					}
+				}
+				predictions[index] = move_state(v[i],predictions[i]);
+			}
+		break;
 
-
+	}
+		
+	cout<<"Double bimodal"<<"("<<size<<"): "<<accurate<<","<<v.size()<<endl;
+		
 
 
 }
