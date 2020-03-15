@@ -193,6 +193,103 @@ void double_bimodal(vector<Branch>v, int size){
 				predictions[index] = move_state(v[i],predictions[index]);
 			}
 		break;
+		case 32:
+			for(int i = 0; i<v.size();i++){
+				index = v[i].getAddress()&0x0000001F;
+				if (v[i].getBehavior() == "T"){
+					if(predictions[index] == 11 || predictions[index]==10){
+						accurate++;
+					}
+				}
+				else if(v[i].getBehavior() == "NT"){
+					if(predictions[index] == 0 || predictions[index] == 1){
+						accurate++;
+					}
+				}
+				predictions[index] = move_state(v[i],predictions[index]);
+			}
+		break;
+		case 128:
+			for(int i = 0; i<v.size();i++){
+				index = v[i].getAddress()&0x0000007F;
+				if (v[i].getBehavior() == "T"){
+					if(predictions[index] == 11 || predictions[index]==10){
+						accurate++;
+					}
+				}
+				else if(v[i].getBehavior() == "NT"){
+					if(predictions[index] == 0 || predictions[index] == 1){
+						accurate++;
+					}
+				}
+				predictions[index] = move_state(v[i],predictions[index]);
+			}
+		break;
+		case 256:
+			for(int i = 0; i<v.size();i++){
+				index = v[i].getAddress()&0x000000FF;
+				if (v[i].getBehavior() == "T"){
+					if(predictions[index] == 11 || predictions[index]==10){
+						accurate++;
+					}
+				}
+				else if(v[i].getBehavior() == "NT"){
+					if(predictions[index] == 0 || predictions[index] == 1){
+						accurate++;
+					}
+				}
+				predictions[index] = move_state(v[i],predictions[index]);
+			}
+		break;
+		case 512:
+			for(int i = 0; i<v.size();i++){
+				index = v[i].getAddress()&0x000001FF;
+				if (v[i].getBehavior() == "T"){
+					if(predictions[index] == 11 || predictions[index]==10){
+						accurate++;
+					}
+				}
+				else if(v[i].getBehavior() == "NT"){
+					if(predictions[index] == 0 || predictions[index] == 1){
+						accurate++;
+					}
+				}
+				predictions[index] = move_state(v[i],predictions[index]);
+			}
+		break;
+		case 1024:
+			for(int i = 0; i<v.size();i++){
+				index = v[i].getAddress()&0x000003FF;
+				if (v[i].getBehavior() == "T"){
+					if(predictions[index] == 11 || predictions[index]==10){
+						accurate++;
+					}
+				}
+				else if(v[i].getBehavior() == "NT"){
+					if(predictions[index] == 0 || predictions[index] == 1){
+						accurate++;
+					}
+				}
+				predictions[index] = move_state(v[i],predictions[index]);
+			}
+		break;
+		case 2048:
+			for(int i = 0; i<v.size();i++){
+				index = v[i].getAddress()&0x000007FF;
+				if (v[i].getBehavior() == "T"){
+					if(predictions[index] == 11 || predictions[index]==10){
+						accurate++;
+					}
+				}
+				else if(v[i].getBehavior() == "NT"){
+					if(predictions[index] == 0 || predictions[index] == 1){
+						accurate++;
+					}
+				}
+				predictions[index] = move_state(v[i],predictions[index]);
+			}
+		break;
+			
 
 	}
 		
