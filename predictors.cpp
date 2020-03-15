@@ -167,9 +167,13 @@ void single_bimodal(vector<Branch> v, int size){
 	cout<<"Single bimodal"<<"("<<size<<"): "<<accurate<<","<<v.size()<<endl;
 }
 void double_bimodal(vector<Branch>v, int size){
-	int prediction = 11;
+	int table[size];
+	//initialize all values in table to strongly taken:
+	for(int i = 0;i<size;i++){
+		table[i] = 11;
+	}
 	int accurate = 0;
-	for (int i = 0; i<v.size; i++){
+/*	for (int i = 0; i<v.size; i++){
 		if (v[i].getBehavior == "T"){
 			if (prediction == 11 || prediction == 10){
 				accurates++;
@@ -177,7 +181,9 @@ void double_bimodal(vector<Branch>v, int size){
 		}
 		prediction = move_state(v[i],prediction);
 	}
-	cout<<"Double bimodal
+	cout<<"Double bimodal*/
+	switch(size){
+
 
 
 
@@ -186,7 +192,7 @@ void double_bimodal(vector<Branch>v, int size){
 
 
 
-int move_state ==  (Branch b,int state){
+int move_state(Branch b,int state){
 	switch(state){
 		case 11: //strongly taken
 			if(b.getBehavior() == "T"){
