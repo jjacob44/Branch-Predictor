@@ -16,6 +16,8 @@ void always_nonTaken(vector<Branch>);
 void single_bimodal(vector<Branch>,int);
 void double_bimodal(vector<Branch>,int);
 int move_state(Branch, int);
+string change_state(string, string);
+void gshare(vector<Branch>, int);
 int main(int argc, char *argv[]) {
 
   // Temporary variables
@@ -72,6 +74,8 @@ int main(int argc, char *argv[]) {
   double_bimodal(branches,512);
   double_bimodal(branches,1024);
   double_bimodal(branches,2048);
+  //gshare
+  gshare(branches,3);
 	
   return 0;
 }
@@ -345,7 +349,97 @@ int move_state(Branch b,int state){
 			}
 		break;
 	}
+
 }
+string change_state(string pred, string outcome){
+	if (pred == "TT"){//strongly taken
+		if (outcome == "T"){
+			return "TT";//stay at strongly taken
+		}
+		else if (outcome == "NT"){
+			return "T"; //go to weakly taken
+		}
+	}
+	else if(pred == "T"){//weakly taken
+		if(outcome == "T"){
+			return "TT"; //go to strongly taken 
+		}
+		else if(outcome == "NT"){
+			return "NT"; //go to weakly non-taken 
+		}
+	}
+	else if(pred == "NT"){//weakly non-taken
+		if(outcome == "T"){
+			return "T"; //go to weakly taken
+		}
+		else if(outcome == "NT"){
+			return "NTNT";// go to strongly non-taken
+		}
+	}
+	else if(pred == "NTNT"){ //strongly non-taken
+		if (outcome == "T"){
+			return "NT"; // go to weakly non-taken
+		}
+		else if(outcome =="NT"){
+			return "NTNT"; //stay at strongly non-taken
+		}
+	}
+
+
+}
+
+
+	
+
+void gshare(vector<Branch>v, int size){
+	int accurate  = 0;
+	string predictions[2048];
+	int index = 0;
+	unsigned long long GHR = 0;
+	//initialize all table values to strongly taken
+	for (int i = 0; i<2048; i++){
+		predictions[i] = "TT";
+	}
+	switch (size){
+		case 3:
+			for(int i = 0; i<v.size(); i++){
+				int addr_mod = v[i].getAddress() % 2048;
+				index = addr_mod^GHR;
+				if(v[i].getBehavior() == "T"){ //branch is taken
+					if(predictions[index] == "TT" ||predictions[index] == "T"){//if the branch is taken, and the prediction is right
+						accurate++;
+						predictions[index] = change_state(predictions[index],v[i].getBehavior());
+					}
+					else if(predictions[index] == "NTNT" || predictions[index] =="NT"){// branch is taken, and the prediction is wrong
+						predictions[index] = change_state(predictions[index],v[i].getBehavior());
+					}
+					unsigned long long temp = GHR<<1;
+					unsigned long long temp2 = temp | 0x00000001;
+					GHR =temp2 & 0x00000007;
+				}
+				else if(v[i].getBehavior() == "NT"){//branch is not taken
+					if(predictions[index] == "NTNT" || predictions[index] =="NT"){
+						accurate++;
+						predictions[index] = change_state(predictions[index],v[i].getBehavior());
+			
+					}
+					else if(predictions[index] == "TT" || predictions[index] == "T"){
+						predictions[index] = change_state(predictions[index],v[i].getBehavior());
+
+
+					}
+					unsigned long long temp = GHR<<1;
+					GHR= temp & 0x00000007;
+				}
+			}
+			cout<<"gshare"<<"("<<size<<"): "<<accurate<<","<<v.size()<<endl;
+	}
+
+
+}
+
+
+
 
 			
 
