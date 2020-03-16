@@ -432,8 +432,274 @@ void gshare(vector<Branch>v, int size){
 					GHR= temp & 0x00000007;
 				}
 			}
-			cout<<"gshare"<<"("<<size<<"): "<<accurate<<","<<v.size()<<endl;
+			//cout<<"gshare"<<"("<<size<<"): "<<accurate<<","<<v.size()<<endl;
+		break;
+		case 4:
+			for(int i = 0; i<v.size(); i++){
+				int addr_mod = v[i].getAddress() % 2048;
+				index = addr_mod^GHR;
+				if(v[i].getBehavior() == "T"){ //branch is taken
+					if(predictions[index] == "TT" ||predictions[index] == "T"){//if the branch is taken, and the prediction is right
+						accurate++;
+						predictions[index] = change_state(predictions[index],v[i].getBehavior());
+					}
+					else if(predictions[index] == "NTNT" || predictions[index] =="NT"){// branch is taken, and the prediction is wrong
+						predictions[index] = change_state(predictions[index],v[i].getBehavior());
+					}
+					unsigned long long temp = GHR<<1;
+					unsigned long long temp2 = temp | 0x00000001;
+					GHR =temp2 & 0x0000000F;
+				}
+				else if(v[i].getBehavior() == "NT"){//branch is not taken
+					if(predictions[index] == "NTNT" || predictions[index] =="NT"){
+						accurate++;
+						predictions[index] = change_state(predictions[index],v[i].getBehavior());
+			
+					}
+					else if(predictions[index] == "TT" || predictions[index] == "T"){
+						predictions[index] = change_state(predictions[index],v[i].getBehavior());
+
+
+					}
+					unsigned long long temp = GHR<<1;
+					GHR= temp & 0x0000000F;
+				}
+			}
+			//cout<<"gshare"<<"("<<size<<"): "<<accurate<<","<<v.size()<<endl;
+		break;
+		case 5:
+			for(int i = 0; i<v.size(); i++){
+				int addr_mod = v[i].getAddress() % 2048;
+				index = addr_mod^GHR;
+				if(v[i].getBehavior() == "T"){ //branch is taken
+					if(predictions[index] == "TT" ||predictions[index] == "T"){//if the branch is taken, and the prediction is right
+						accurate++;
+						predictions[index] = change_state(predictions[index],v[i].getBehavior());
+					}
+					else if(predictions[index] == "NTNT" || predictions[index] =="NT"){// branch is taken, and the prediction is wrong
+						predictions[index] = change_state(predictions[index],v[i].getBehavior());
+					}
+					unsigned long long temp = GHR<<1;
+					unsigned long long temp2 = temp | 0x00000001;
+					GHR =temp2 & 0x0000001F;
+				}
+				else if(v[i].getBehavior() == "NT"){//branch is not taken
+					if(predictions[index] == "NTNT" || predictions[index] =="NT"){
+						accurate++;
+						predictions[index] = change_state(predictions[index],v[i].getBehavior());
+			
+					}
+					else if(predictions[index] == "TT" || predictions[index] == "T"){
+						predictions[index] = change_state(predictions[index],v[i].getBehavior());
+
+
+					}
+					unsigned long long temp = GHR<<1;
+					GHR= temp & 0x0000001F;
+				}
+			}
+			//cout<<"gshare"<<"("<<size<<"): "<<accurate<<","<<v.size()<<endl;
+		break;
+		case 6:
+			for(int i = 0; i<v.size(); i++){
+				int addr_mod = v[i].getAddress() % 2048;
+				index = addr_mod^GHR;
+				if(v[i].getBehavior() == "T"){ //branch is taken
+					if(predictions[index] == "TT" ||predictions[index] == "T"){//if the branch is taken, and the prediction is right
+						accurate++;
+						predictions[index] = change_state(predictions[index],v[i].getBehavior());
+					}
+					else if(predictions[index] == "NTNT" || predictions[index] =="NT"){// branch is taken, and the prediction is wrong
+						predictions[index] = change_state(predictions[index],v[i].getBehavior());
+					}
+					unsigned long long temp = GHR<<1;
+					unsigned long long temp2 = temp | 0x00000001;
+					GHR =temp2 & 0x0000003F;
+				}
+				else if(v[i].getBehavior() == "NT"){//branch is not taken
+					if(predictions[index] == "NTNT" || predictions[index] =="NT"){
+						accurate++;
+						predictions[index] = change_state(predictions[index],v[i].getBehavior());
+			
+					}
+					else if(predictions[index] == "TT" || predictions[index] == "T"){
+						predictions[index] = change_state(predictions[index],v[i].getBehavior());
+
+
+					}
+					unsigned long long temp = GHR<<1;
+					GHR= temp & 0x0000003F;
+				}
+			}
+			//cout<<"gshare"<<"("<<size<<"): "<<accurate<<","<<v.size()<<endl;
+		break;
+		case 7:
+			for(int i = 0; i<v.size(); i++){
+				int addr_mod = v[i].getAddress() % 2048;
+				index = addr_mod^GHR;
+				if(v[i].getBehavior() == "T"){ //branch is taken
+					if(predictions[index] == "TT" ||predictions[index] == "T"){//if the branch is taken, and the prediction is right
+						accurate++;
+						predictions[index] = change_state(predictions[index],v[i].getBehavior());
+					}
+					else if(predictions[index] == "NTNT" || predictions[index] =="NT"){// branch is taken, and the prediction is wrong
+						predictions[index] = change_state(predictions[index],v[i].getBehavior());
+					}
+					unsigned long long temp = GHR<<1;
+					unsigned long long temp2 = temp | 0x00000001;
+					GHR =temp2 & 0x0000007F;
+				}
+				else if(v[i].getBehavior() == "NT"){//branch is not taken
+					if(predictions[index] == "NTNT" || predictions[index] =="NT"){
+						accurate++;
+						predictions[index] = change_state(predictions[index],v[i].getBehavior());
+			
+					}
+					else if(predictions[index] == "TT" || predictions[index] == "T"){
+						predictions[index] = change_state(predictions[index],v[i].getBehavior());
+
+
+					}
+					unsigned long long temp = GHR<<1;
+					GHR= temp & 0x0000007F;
+				}
+			}
+			//cout<<"gshare"<<"("<<size<<"): "<<accurate<<","<<v.size()<<endl;
+		break;
+		case 8:
+			for(int i = 0; i<v.size(); i++){
+				int addr_mod = v[i].getAddress() % 2048;
+				index = addr_mod^GHR;
+				if(v[i].getBehavior() == "T"){ //branch is taken
+					if(predictions[index] == "TT" ||predictions[index] == "T"){//if the branch is taken, and the prediction is right
+						accurate++;
+						predictions[index] = change_state(predictions[index],v[i].getBehavior());
+					}
+					else if(predictions[index] == "NTNT" || predictions[index] =="NT"){// branch is taken, and the prediction is wrong
+						predictions[index] = change_state(predictions[index],v[i].getBehavior());
+					}
+					unsigned long long temp = GHR<<1;
+					unsigned long long temp2 = temp | 0x00000001;
+					GHR =temp2 & 0x000000FF;
+				}
+				else if(v[i].getBehavior() == "NT"){//branch is not taken
+					if(predictions[index] == "NTNT" || predictions[index] =="NT"){
+						accurate++;
+						predictions[index] = change_state(predictions[index],v[i].getBehavior());
+			
+					}
+					else if(predictions[index] == "TT" || predictions[index] == "T"){
+						predictions[index] = change_state(predictions[index],v[i].getBehavior());
+
+
+					}
+					unsigned long long temp = GHR<<1;
+					GHR= temp & 0x000000FF;
+				}
+			}
+			//cout<<"gshare"<<"("<<size<<"): "<<accurate<<","<<v.size()<<endl;
+		break;
+		case 9:
+			for(int i = 0; i<v.size(); i++){
+				int addr_mod = v[i].getAddress() % 2048;
+				index = addr_mod^GHR;
+				if(v[i].getBehavior() == "T"){ //branch is taken
+					if(predictions[index] == "TT" ||predictions[index] == "T"){//if the branch is taken, and the prediction is right
+						accurate++;
+						predictions[index] = change_state(predictions[index],v[i].getBehavior());
+					}
+					else if(predictions[index] == "NTNT" || predictions[index] =="NT"){// branch is taken, and the prediction is wrong
+						predictions[index] = change_state(predictions[index],v[i].getBehavior());
+					}
+					unsigned long long temp = GHR<<1;
+					unsigned long long temp2 = temp | 0x00000001;
+					GHR =temp2 & 0x000001FF;
+				}
+				else if(v[i].getBehavior() == "NT"){//branch is not taken
+					if(predictions[index] == "NTNT" || predictions[index] =="NT"){
+						accurate++;
+						predictions[index] = change_state(predictions[index],v[i].getBehavior());
+			
+					}
+					else if(predictions[index] == "TT" || predictions[index] == "T"){
+						predictions[index] = change_state(predictions[index],v[i].getBehavior());
+
+
+					}
+					unsigned long long temp = GHR<<1;
+					GHR= temp & 0x000001FF;
+				}
+			}
+			//cout<<"gshare"<<"("<<size<<"): "<<accurate<<","<<v.size()<<endl;
+		break;
+		case 10:
+			for(int i = 0; i<v.size(); i++){
+				int addr_mod = v[i].getAddress() % 2048;
+				index = addr_mod^GHR;
+				if(v[i].getBehavior() == "T"){ //branch is taken
+					if(predictions[index] == "TT" ||predictions[index] == "T"){//if the branch is taken, and the prediction is right
+						accurate++;
+						predictions[index] = change_state(predictions[index],v[i].getBehavior());
+					}
+					else if(predictions[index] == "NTNT" || predictions[index] =="NT"){// branch is taken, and the prediction is wrong
+						predictions[index] = change_state(predictions[index],v[i].getBehavior());
+					}
+					unsigned long long temp = GHR<<1;
+					unsigned long long temp2 = temp | 0x00000001;
+					GHR =temp2 & 0x000003FF;
+				}
+				else if(v[i].getBehavior() == "NT"){//branch is not taken
+					if(predictions[index] == "NTNT" || predictions[index] =="NT"){
+						accurate++;
+						predictions[index] = change_state(predictions[index],v[i].getBehavior());
+			
+					}
+					else if(predictions[index] == "TT" || predictions[index] == "T"){
+						predictions[index] = change_state(predictions[index],v[i].getBehavior());
+
+
+					}
+					unsigned long long temp = GHR<<1;
+					GHR= temp & 0x000003FF;
+				}
+			}
+			//cout<<"gshare"<<"("<<size<<"): "<<accurate<<","<<v.size()<<endl;
+		break;
+		case 11:
+			for(int i = 0; i<v.size(); i++){
+				int addr_mod = v[i].getAddress() % 2048;
+				index = addr_mod^GHR;
+				if(v[i].getBehavior() == "T"){ //branch is taken
+					if(predictions[index] == "TT" ||predictions[index] == "T"){//if the branch is taken, and the prediction is right
+						accurate++;
+						predictions[index] = change_state(predictions[index],v[i].getBehavior());
+					}
+					else if(predictions[index] == "NTNT" || predictions[index] =="NT"){// branch is taken, and the prediction is wrong
+						predictions[index] = change_state(predictions[index],v[i].getBehavior());
+					}
+					unsigned long long temp = GHR<<1;
+					unsigned long long temp2 = temp | 0x00000001;
+					GHR =temp2 & 0x000007FF;
+				}
+				else if(v[i].getBehavior() == "NT"){//branch is not taken
+					if(predictions[index] == "NTNT" || predictions[index] =="NT"){
+						accurate++;
+						predictions[index] = change_state(predictions[index],v[i].getBehavior());
+			
+					}
+					else if(predictions[index] == "TT" || predictions[index] == "T"){
+						predictions[index] = change_state(predictions[index],v[i].getBehavior());
+
+
+					}
+					unsigned long long temp = GHR<<1;
+					GHR= temp & 0x000007FF;
+				}
+			}
+			//cout<<"gshare"<<"("<<size<<"): "<<accurate<<","<<v.size()<<endl;
+		break;
 	}
+	cout<<"gshare"<<"("<<size<<"): "<<accurate<<","<<v.size()<<endl;
 
 
 }
