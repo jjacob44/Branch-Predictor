@@ -7,10 +7,12 @@
 #include<string>
 #include<vector>
 #include"Branch.h"
+#include<fstream>
 
 
 using namespace std;
 //function declarations:
+//ofstream out(argv[2]);
 void always_taken(vector<Branch>);
 void always_nonTaken(vector<Branch>);
 void single_bimodal(vector<Branch>,int);
@@ -18,7 +20,13 @@ void double_bimodal(vector<Branch>,int);
 int move_state(Branch, int);
 string change_state(string, string);
 void gshare(vector<Branch>, int);
+void gshare2(vector<Branch>);
+int update(bool,int);
+void bimodal2(vector<Branch>);
+void tournament(vector<Branch>);
+
 int main(int argc, char *argv[]) {
+	ofstream out(argv[2]);
 
   // Temporary variables
   unsigned long long addr;
@@ -78,6 +86,8 @@ int main(int argc, char *argv[]) {
   for (int i=3;i<12;i++){
 	  gshare(branches,i);
   }
+  //tournament
+  tournament(branches);
 	
   return 0;
 }
@@ -705,6 +715,150 @@ void gshare(vector<Branch>v, int size){
 
 
 }
+void bimodal2(vector<Branch>v){ //bimodal predictor participating in the tournament
+	//0 = strongly non-taken
+	//1 = weakly non-taken
+	//10 = weakly taken
+	//11 = strongly taken
+	int prediction = 11; 
+	int table[2048];
+	int index = 0;
+	for(int i = 0; i<2048; i++){ //initialize everything to strongly taken
+		table[i] = 11;
+	}
+	for(int i = 0; i<v.size();i++){
+		index = v[i].getAddress() & 0x000007FF;
+		if(v[i].getBehavior() == "T"){
+			if (table[index]==11 || table[index] == 10){
+				v[i].setbimodal(true);
+			}
+		}
+		else if(v[i].getBehavior() == "NT"){
+			if(table[index] == 0 || table[index] == 1){
+				v[i].setbimodal(true);
+			}
+		}
+		table[index] = move_state(v[i],table[index]);
+	}
+}
+void gshare2(vector<Branch>v){	//gshare predictor participating in the tournamet
+	string table[2048];
+	int index = 0;
+	unsigned long long GHR = 0;
+	for (int i=0; i<2048;i++){
+		table[i] = "TT";
+	}
+	for(int i=0;i<v.size();i++){
+		int addr_mod = v[i].getAddress() % 2048;
+		index = addr_mod^GHR;
+		if(v[i].getBehavior() == "T"){
+			if(table[index] =="TT"||table[index] == "T"){
+				v[i].setgshare(true);
+				table[index] = change_state(table[index],v[i].getBehavior());
+			}
+			else if(table[index] == "NTNT" || table[index] == "NT"){
+				table[index] = change_state(table[index],v[i].getBehavior());
+			}
+			unsigned long long temp = GHR<<1;
+			unsigned long long temp2 = temp | 0x00000001;
+			GHR = temp2 & 0x000007FF;
+		}
+		else if(v[i].getBehavior() =="NT"){
+			if(table[index] == "NTNT" || table[index] == "NT"){
+				v[i].setgshare(true);
+				table[index] = change_state(table[index],v[i].getBehavior());
+			}
+			else if(table[index] == "TT" || table[index] == "T"){
+				table[index] = change_state(table[index],v[i].getBehavior());
+			}
+
+			unsigned long long temp = GHR<<1;
+			GHR = temp & 0x000007FF;
+		}
+	}
+}
+int update(bool b, int state){
+	switch (state){
+		case 3:
+			if (b == true){
+				return 3; //stay at strongly gshare
+			}
+			else{
+				return 2;//go to weakly gshare
+			}
+		break;
+		case 2:
+			if (b == true){
+				return 3; // go to strongly gshare
+			}
+			else{
+				return 1; //go to weakly bimodal
+			}
+		break;
+		case 1:
+			if (b== true){
+				return 2; //go to weakly gshare
+			}
+			else{
+				return 0; // go to strongly bimodal
+			}
+		case 0:
+			if (b == true){
+				return 1; //go to weakly bimodal
+			}
+			else{
+				return 0; //stay in strongly bimodal
+			}
+	}
+}
+				
+void tournament(vector<Branch>v){
+	//3 - strongly prefer gshare
+	//2-weakly prefer gshare
+	//1 - weakly prefer bimodal
+	//0 - strongly prefer bimodal
+	int accurate = 0;
+	int selector[2048];
+	int index = 0;
+	for (int i = 0; i<2048; i++){
+		selector[i]= 3;
+	}
+	bimodal2(v);
+	gshare2(v);
+	for (int i = 0; i< v.size(); i++){
+		index = v[i].getAddress() & 0x000007FF;
+		//cout<<index<<endl;
+		if(v[i].getgshare() == true && v[i].getbimodal() == false){
+			cout<<"in if statement 1"<<endl;
+				if (selector[index]>=2){
+					accurate++;
+					cout<<"in if statement 2"<<endl;
+				}
+				selector[index] = update(true, selector[index]);
+		}
+		else if(v[i].getgshare() == false && v[i].getbimodal() == true){
+			cout<<"in if statement 3"<<endl;
+			if (selector[index] <2){
+				cout<<"in if statement 4"<<endl;
+				accurate++;
+				//cout<<accurate<<endl;
+			}
+			selector[index] = update(false,selector[index]);
+		}
+		else if (v[i].getgshare() == v[i].getbimodal()){
+			continue;
+		}
+	}
+	cout<<"tournament: "<<accurate<<endl;
+}
+
+
+
+
+
+
+
+
 
 
 
