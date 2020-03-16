@@ -75,7 +75,9 @@ int main(int argc, char *argv[]) {
   double_bimodal(branches,1024);
   double_bimodal(branches,2048);
   //gshare
-  gshare(branches,3);
+  for (int i=3;i<12;i++){
+	  gshare(branches,i);
+  }
 	
   return 0;
 }
